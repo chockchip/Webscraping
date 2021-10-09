@@ -1,7 +1,7 @@
 from common import browser_factory
 import project.Google.home as home
 
-driver_path = "driver/chromedriver"
+#driver_path = "driver/chromedriver"
 is_option = True
 is_headless = False
 
