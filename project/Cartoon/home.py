@@ -21,9 +21,9 @@ class CartoonElements():
 class CartoonHome(page.Page):
     def open(self,index):
         #self.url = 'https://www.kingsmanga.net/one-piece-1019/'
-        #self.url = "https://dootoon18.com/manga/a-wonderful-new-world/ตอนที่-"+ str(index) +"/"
+        self.url = "https://dootoon18.com/manga/a-wonderful-new-world/ตอนที่-"+ str(index) +"/"
         #self.url = "https://www.niceoppai.net/A-Wonderful-New-World/" + str(index) + "/"
-        self.url = "https://catzaa.com/manga/a-wonderful-new-world/ตอนที่-" + str(index) + "/"
+        #self.url = "https://catzaa.com/manga/a-wonderful-new-world/ตอนที่-" + str(index) + "/"
         self.open_browser(self.url)
         self.image_list = []
 
@@ -51,7 +51,7 @@ class CartoonHome(page.Page):
         print(self.image_list)
         print("*"*30)
         for idx, url in enumerate(self.image_list):
-            path = "./project/Cartoon/images/"
+            path = "./Webscraping/project/Cartoon/images/"
             print("*"*30)
             print(url)
             print("*"*30)
@@ -61,8 +61,8 @@ class CartoonHome(page.Page):
     def create_pdf(self, index):
         images_path = []
 
-        path_directory = "./project/Cartoon/images"
-        path_image = "./project/Cartoon/images/"
+        path_directory = "./Webscraping/project/Cartoon/images/"
+        path_image = "./Webscraping/project/Cartoon/images/"
         images = helper.get_files_from_directory(path_directory)
         
         images_sort = helper.sort_text_with_number(images)
@@ -76,7 +76,7 @@ class CartoonHome(page.Page):
         helper.create_pdf(images_path, "a-wonderful-new-world " + str(index))
 
     def delete_images(self):
-        path = "./project/Cartoon/images"
+        path = "./Webscraping/project/Cartoon/images"
         images = helper.get_files_from_directory(path)
         for file in images:
             if "image" in file:

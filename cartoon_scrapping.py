@@ -1,8 +1,17 @@
+import csv
+import os,sys,inspect
+from numpy.core.arrayprint import DatetimeFormat
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, current_dir) 
+
 from common import browser_factory
 from project.Cartoon import home
 import time
 
-driver_path = "driver/chromedriver"
+print(parent_dir)
+
+driver_path = "./Webscraping/driver/chromedriver"
 is_option = True
 is_headless = False
 
@@ -23,12 +32,14 @@ cartoon_home = home.CartoonHome(web.driver)
 #     cartoon_home.wait(5)
 #     time.sleep(3)
 
-for i in range(1, 2):
-    cartoon_home.open(i)
-    cartoon_home.wait(1)
-    cartoon_home.get_images()
-    cartoon_home.save_image()
+for i in range(127, 130):
+    # cartoon_home.open(i)
+    # cartoon_home.wait(1)
+    # cartoon_home.scroll_slow_to_end()
+    # cartoon_home.get_images()
+    # cartoon_home.save_image()
     cartoon_home.create_pdf(i)
-    cartoon_home.delete_images()
+    # cartoon_home.delete_images()
     cartoon_home.wait(5)
     time.sleep(3)
+    #cartoon_home.close_browser()

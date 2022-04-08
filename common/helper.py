@@ -3,6 +3,7 @@ import re
 import requests
 from os import walk
 from PIL import Image
+import numpy as np
 
 def hello():
     print("I am helper. I will help you")
@@ -22,16 +23,28 @@ def remove_files_from_directory(path,name):
     os.remove(path + name)
 
 def create_pdf(images, name):
+    
+    if images is np.NaN  or images == []:
+        print("!!"*30)
+        print("Doesn't have any image file.")
+        print("!!"*30)
+        return()
+
     image_list = []
 
     for file in images:
         img = Image.open(file)
-        image_list.append(img)
+        if img.mode == 'RGBA':
+            rgb_img = Image.new('RGB', img.size, (255, 255, 255))
+            rgb_img.paste(img, mask=img.split()[3])
+            image_list.append(rgb_img)
+        else:
+            image_list.append(img)
 
     img1 = image_list[0]
     img_oth = image_list[1:]
     
-    img1.save(name+".pdf",save_all=True, append_images=img_oth)
+    img1.save(name+".pdf", save_all=True, append_images=img_oth)
 
 # Sort the list that contain text with number (Ex test1, test2, ...)
 def atoi(text):

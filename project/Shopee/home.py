@@ -78,9 +78,6 @@ class ShopeeHome(page.Page):
             
         #     name = self.find_element(item, *ShopeeElements.product_name)
         #     print(name.text)
-
-
-
         ##
 
         # item_names = []
