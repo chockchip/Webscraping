@@ -1,3 +1,4 @@
+from unittest import result
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from common import page
@@ -11,8 +12,9 @@ class ShopeeElements():
     button_search = (By.XPATH, "//button[contains(@class,'btn btn-solid-primary btn--s btn--inline')]")
     
     # Have to use .// for find a child element
-    product_name = (By.XPATH, ".//div[contains(@class, 'yQmmFK _1POlWt _36CEnF')]")
-    search_results = (By.XPATH, "//div[contains(@class, 'col-xs-2-4 shopee-search-item-result__item')]")
+    search_results = (By.XPATH, "//div[contains(@class,'result__items')]")
+    product_name = (By.XPATH, ".//div[contains(@class, '_10Wbs- _2STCsK _3IqNCf')]")
+    ## search_results = (By.XPATH, "//div[contains(@class, 'col-xs-2-4 shopee-search-item-result__item')]")
     images = (By.XPATH, ".//img[contains(@class, 'mxM4vG _2GchKS')]")
     prices = (By.XPATH, ".//span[contains(@class, '_29R_un')]")
 
@@ -57,9 +59,17 @@ class ShopeeHome(page.Page):
         # Slow scroll to the end of the page to load all elements properly
         self.scroll_slow_to_end()
 
-        results = self.find_elements(*ShopeeElements.search_results)
+        results = self.find_element(*ShopeeElements.search_results)
+
+        print(results.get_attribute("class"))
         
-        names = [item.find_element(*ShopeeElements.product_name).text for item in results]
+        # names = [item.find_element(*ShopeeElements.product_name).text for item in results]
+
+        names = results.find_elements(*ShopeeElements.product_name)
+
+        for name in names:
+            print(name.text)
+
         
         for item in results:
             image = item.find_element(*ShopeeElements.images)

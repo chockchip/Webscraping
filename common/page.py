@@ -114,6 +114,13 @@ class Page():
     def scroll_slow_to_end(self):
         height = self.driver.execute_script("return document.body.scrollHeight")
         
-        for step in range(0, height, int(height/30)):
+        step = 0
+
+        if height <= 30:
+            step = 1
+        else:
+            step = int(height/30)
+
+        for step in range(0, height, step):
             self.driver.execute_script(f"window.scrollTo(0, {step});")
             self.wait(0.5)
