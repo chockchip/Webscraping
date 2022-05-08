@@ -2,14 +2,18 @@ from unittest import result
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from common import page
+import json
+import time
 
 # Shopee elements
 class ShopeeElements():
     logo = (By.XPATH, "//svg[contains(@class,'icon-shopee-logo')]")
-    button_language = (By.XPATH, "//button[contains(@class,'shopee-button-outline shopee-button-outline--primary-reverse ')]")
-    button_popup = (By.XPATH, "//div[contains(@class,'shopee-popup__close-btn')]")
+    button_language = (By.XPATH, "//button[contains(text(), 'English')]")
+    button_popup = (By.XPATH, "//div[@class = 'shopee-popup__close-btn']")
+    #button_popup = (By.XPATH, ".//div[contains(@class,'shopee-popup__close-btn')]")
     search_box = (By.XPATH, "//input[contains(@class,'shopee-searchbar-input__input')]")
     button_search = (By.XPATH, "//button[contains(@class,'btn btn-solid-primary btn--s btn--inline')]")
+    shadow_host_root = (By.XPATH, "//shopee-banner-popup-stateful[contains(@spacekey, 'PC-TH-HOME')]")
     
     # Have to use .// for find a child element
     search_results = (By.XPATH, "//div[contains(@class,'result__items')]")
@@ -33,17 +37,34 @@ class ShopeeHome(page.Page):
             print("Does not found the select language page")
 
     def close_popup(self):
-        #if(self.check_element_exist(ShopeeElements.button_popup)):
+        # It's in shadow root.
+        try:
+            close_btn = self.driver.execute_script('return document.querySelector("#main shopee-banner-popup-stateful").shadowRoot.querySelector("div.home-popup__close-area div.shopee-popup__close-btn")')
+            close_btn.click()
+            print('Clicked successfully')
+        except:
+            print('Could not clicked')
+            pass
+
+    def close_popup_shadow(self):
+        # shadow_host = self.find_element(*(By.XPATH, "//shopee-banner-popup-stateful"))
         
-        # *** Have to check why can't find element on the page
-        if(True):
-            button_close_popup = self.find_element(*ShopeeElements.button_popup)
-            self.wait_element_visible(button_close_popup)
-            button_close_popup.click()
-        else:
-            print('Does not found popup')
-            body = self.find_element(*ShopeeElements.body)
-            body.click()
+        # shadow_root = self.find_root_shadow(shadow_host)
+        # print(shadow_root)
+        # button = shadow_root.find_element(By.CSS_SELECTOR, 'div.shopee-popup__close-btn') 
+        # print(button)
+        # a = 1
+        # button.click()
+
+        button = self.find_shadow_element('div.shopee-popup__close-btn')
+        button.click()
+
+        
+
+        
+        
+
+
 
     def search_items(self,msg):
         search_box = self.find_element(*ShopeeElements.search_box)
@@ -101,3 +122,8 @@ class ShopeeHome(page.Page):
         print(len(product_names))
         for name in product_names:
             print(name.text)
+
+    def read_items(self, path):
+        with open(path) as data_json:
+            data = json.load(data_json)
+            print(data)

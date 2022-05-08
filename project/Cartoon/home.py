@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from common import page
 from common import helper
 import time
+import random
 
 class CartoonElements():
     # Kingsmanga
@@ -47,23 +48,31 @@ class CartoonHome(page.Page):
             print("Don't found any image from this cartoon page")
 
     def save_image(self):
+
+        image_directory = './project/Cartoon/images/'
+
         print("*"*30)
         print(self.image_list)
         print("*"*30)
         for idx, url in enumerate(self.image_list):
-            path = "./Webscraping/project/Cartoon/images/"
+            
+            if url is None:
+                continue
+
             print("*"*30)
             print(url)
             print("*"*30)
-            helper.save_image_url(path +"image" + str(idx) + ".png", url)
-            time.sleep(1)
+            helper.save_image_url(image_directory +"image" + str(idx) + ".png", url)
+            self.random_waitting(3)
+            # time.sleep(1)
+        print('save finished')
 
     def create_pdf(self, index):
+
+        image_directory = './project/Cartoon/images/'
         images_path = []
 
-        path_directory = "./Webscraping/project/Cartoon/images/"
-        path_image = "./Webscraping/project/Cartoon/images/"
-        images = helper.get_files_from_directory(path_directory)
+        images = helper.get_files_from_directory(image_directory)
         
         images_sort = helper.sort_text_with_number(images)
         print("*"*30)
@@ -71,14 +80,18 @@ class CartoonHome(page.Page):
         print("*"*30)
         for file in images_sort:
             if "image" in file:
-                images_path.append(path_image+file)
+                images_path.append(image_directory+file)
                 
         helper.create_pdf(images_path, "a-wonderful-new-world " + str(index))
 
     def delete_images(self):
-        path = "./Webscraping/project/Cartoon/images"
+        path = "./project/Cartoon/images"
         images = helper.get_files_from_directory(path)
         for file in images:
             if "image" in file:
                 helper.remove_files_from_directory(path + "/" , file)
+
+    def random_waitting(self, max_waiting:int):
+        sleeping_time = random.randint(1, max_waiting)
+        time.sleep(sleeping_time)    
     

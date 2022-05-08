@@ -1,15 +1,20 @@
 import string
+from turtle import position
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.action_chains import ActionChains
+from pyshadow.main import Shadow
 import time
 
 class Page():
     def __init__(self, driver):
 
         self.driver = driver
+
+        # Setup shadow
+        self.shadow = Shadow(self.driver)
 
         # - Implicit waitting 
         # A Common waiting for element located
@@ -52,6 +57,22 @@ class Page():
 
     def find_elements(self,*locator):
         return self.driver.find_elements(*locator)
+
+    def find_shadow_element(self, locator):
+        # Just accept the sting of css_selector
+        return self.shadow.find_element(locator)
+
+    def find_shadow_elements(self, locator):
+        return self.shadow.find_elements(locator)
+
+    def find_root_shadow(self, host_element):
+        '''
+        This is use to find the shadowdom manully. We can use it to handle the 
+        nested dom.
+        '''
+
+        return self.driver.execute_script('return arguments[0].shadowRoot', host_element)
+
 
     # def find_child_element(self, element, *locator):
     #     return element.find_element(*locator)
@@ -105,6 +126,13 @@ class Page():
         except:
             return False
 
+    def check_shadow_element_exist(self, *locator):
+        try:
+            self.shadow.find_element(*locator)
+            return True
+        except:
+            return False
+
     def scroll_to_end(self):
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
@@ -112,15 +140,44 @@ class Page():
         self.driver.execute_script("window.scrollTo(0, 0);")
 
     def scroll_slow_to_end(self):
-        height = self.driver.execute_script("return document.body.scrollHeight")
         
-        step = 0
+        height = 999999
+        current_position = 0
 
-        if height <= 30:
-            step = 1
-        else:
+        while(height != current_position):
+            height = self.driver.execute_script("return document.body.scrollHeight")
             step = int(height/30)
 
-        for step in range(0, height, step):
-            self.driver.execute_script(f"window.scrollTo(0, {step});")
-            self.wait(0.5)
+            for step in range(current_position, height, step):
+                self.driver.execute_script(f"window.scrollTo(0, {step});")
+                self.wait(0.5)
+
+            current_position = height
+            height = self.driver.execute_script("return document.body.scrollHeight")
+
+    def scroll_slow_to_end_v2(self):
+        SCROLL_PAUSE_TIME = 1
+
+        # Get scroll height
+        last_height = self.driver.execute_script("return document.body.scrollHeight")
+
+        while True:
+
+            step = int(last_height/50)
+            current_position = 0
+
+            for step in range(current_position, last_height, step):
+                self.driver.execute_script(f"window.scrollTo(0, {step});")
+                self.wait(0.5)
+
+            # Wait to load page
+            time.sleep(SCROLL_PAUSE_TIME)
+
+            # Calculate new scroll height and compare with last scroll height
+            new_height = self.driver.execute_script("return document.body.scrollHeight")
+
+            if new_height == last_height:
+                break
+            current_position = last_height
+            last_height = new_height
+        

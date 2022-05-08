@@ -11,7 +11,7 @@ import time
 
 print(parent_dir)
 
-driver_path = "./Webscraping/driver/chromedriver"
+driver_path = "/Users/watcharapongwongrattanasirikul/Documents/Git/Webscraping/driver/chromedriver"
 is_option = True
 is_headless = False
 
@@ -32,14 +32,13 @@ cartoon_home = home.CartoonHome(web.driver)
 #     cartoon_home.wait(5)
 #     time.sleep(3)
 
-for i in range(127, 130):
-    # cartoon_home.open(i)
-    # cartoon_home.wait(1)
-    # cartoon_home.scroll_slow_to_end()
-    # cartoon_home.get_images()
-    # cartoon_home.save_image()
+for i in range(136, 137):
+    cartoon_home.open(i)
+    cartoon_home.wait(1)
+    #cartoon_home.scroll_slow_to_end_v2()
+    cartoon_home.wait(3)
+    cartoon_home.get_images()
+    cartoon_home.save_image()
     cartoon_home.create_pdf(i)
-    # cartoon_home.delete_images()
+    cartoon_home.delete_images()
     cartoon_home.wait(5)
-    time.sleep(3)
-    #cartoon_home.close_browser()
