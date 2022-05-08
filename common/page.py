@@ -67,11 +67,28 @@ class Page():
 
     def find_root_shadow(self, host_element):
         '''
-        This is use to find the shadowdom manully. We can use it to handle the 
-        nested dom.
+        Find the shadow root from the host element. We will use this shadow
+        root to find the element in shadow dom.
+
+        :param webelement host_element: The web element that host of the host 
+                                        elelement.
+        :return shadow_root: The root of the shadow dom.
+        :rtype: shadowroot
         '''
 
         return self.driver.execute_script('return arguments[0].shadowRoot', host_element)
+
+    def find_eleement_from_shadow_root(self, shadow_root, css_path):
+        '''
+        Find the element in the shadow root by css_path
+
+        :param shadowroot shadow_root: The shadow root element.
+        :param string css_path: The css path that use to find the element.
+        
+        :return webelement: The web element in the shadow dom.
+        :rtype: webelement
+        '''
+        return shadow_root.find_element(By.CSS_SELECTOR, css_path) 
 
 
     # def find_child_element(self, element, *locator):
