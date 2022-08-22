@@ -44,6 +44,7 @@ class CartoonHome(page.Page):
 
             for idx,i in enumerate(images):
                 self.image_list.append(i.get_attribute("src"))
+                print(f'save image {i}')
         else:
             print("Don't found any image from this cartoon page")
 

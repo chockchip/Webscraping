@@ -32,7 +32,7 @@ cartoon_home = home.CartoonHome(web.driver)
 #     cartoon_home.wait(5)
 #     time.sleep(3)
 
-for i in range(136, 137):
+for i in range(138, 146):
     cartoon_home.open(i)
     cartoon_home.wait(1)
     #cartoon_home.scroll_slow_to_end_v2()

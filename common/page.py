@@ -6,6 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.action_chains import ActionChains
 from pyshadow.main import Shadow
+from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.keys import Keys
 import time
 
 class Page():
@@ -39,7 +41,19 @@ class Page():
         self.driver.maximize_window()
 
     def open_browser(self, url):
-        self.driver.get(url)
+        try:
+            print(url)
+            self.driver.get(url)
+        except WebDriverException as e:
+            print(f"Error: {e}")
+
+    def open_browser_hide_proxy(self, url):
+        hideme_url = "https://hide.me/en/proxy"
+        self.driver.get(hideme_url)
+
+        text_url = self.find_element(*(By.XPATH, "//input[@id='u']"))
+        text_url.send_keys(url)
+        text_url.send_keys(Keys.ENTER)
 
     def close_browser(self):
         self.driver.quit()
@@ -65,7 +79,7 @@ class Page():
     def find_shadow_elements(self, locator):
         return self.shadow.find_elements(locator)
 
-    def find_root_shadow(self, host_element):
+    def find_shadow_root(self, host_element):
         '''
         Find the shadow root from the host element. We will use this shadow
         root to find the element in shadow dom.

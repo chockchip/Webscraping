@@ -59,13 +59,6 @@ class ShopeeHome(page.Page):
         button = self.find_shadow_element('div.shopee-popup__close-btn')
         button.click()
 
-        
-
-        
-        
-
-
-
     def search_items(self,msg):
         search_box = self.find_element(*ShopeeElements.search_box)
         self.wait_element_visible(search_box)
