@@ -38,8 +38,10 @@ def create_pdf(images, name):
             rgb_img = Image.new('RGB', img.size, (255, 255, 255))
             rgb_img.paste(img, mask=img.split()[3])
             image_list.append(rgb_img)
-        else:
+        elif img.mode == "RGB":
             image_list.append(img)
+        else:
+            print(f"Some image go wrong {img}")
 
     img1 = image_list[0]
     img_oth = image_list[1:]
@@ -61,3 +63,13 @@ def natural_keys(text):
 def sort_text_with_number(items):
     items.sort(key=natural_keys)
     return(items)
+
+def get_file_extension_from_file(file_path:str):
+        '''
+        Get file extension from file.
+
+        :param str file_path: The path of the file.
+        :return str: The extension of the file.
+        '''
+
+        return os.path.splitext(file_path)[-1].lower()

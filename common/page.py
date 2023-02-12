@@ -191,11 +191,11 @@ class Page():
 
         # Get scroll height
         last_height = self.driver.execute_script("return document.body.scrollHeight")
+        current_position = 0
 
         while True:
 
             step = int(last_height/50)
-            current_position = 0
 
             for step in range(current_position, last_height, step):
                 self.driver.execute_script(f"window.scrollTo(0, {step});")
@@ -211,4 +211,3 @@ class Page():
                 break
             current_position = last_height
             last_height = new_height
-        
